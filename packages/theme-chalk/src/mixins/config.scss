@@ -1,0 +1,8 @@
+$namespace: 'zz' !default;
+$common-separator: '-' !default;
+$element-separator: '__' !default;
+$modifier-separator: '--' !default;
+$state-prefix: 'is-' !default;
+
+// 修改主题的变量, 可以通过更改对应的值来实现不通的主题的切换
+$html-selector: html;
