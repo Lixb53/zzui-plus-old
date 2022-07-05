@@ -15,7 +15,8 @@
     "build:theme": "pnpm run -C packages/theme-chalk build",
     "stub": "pnpm run -r --parallel stub",
     "postinstall": "pnpm stub && concurrently \"pnpm gen:version\" \"pnpm run -C internal/metadata dev\"",
-    "site": "pnpm -F site dev"
+    "site": "pnpm -F site dev",
+    "site:build": "pnpm -F site build"
   },
   "peerDependencies": {
     "vue": "^3.2.35"
