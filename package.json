@@ -42,6 +42,7 @@
     "normalize-wheel-es": "^1.1.2"
   },
   "devDependencies": {
+    "@ls-lint/ls-lint": "^1.11.2",
     "@pnpm/find-workspace-packages": "^4.0.5",
     "@pnpm/logger": "^4.0.0",
     "@pnpm/types": "^8.0.1",

@@ -9,6 +9,7 @@ importers:
     specifiers:
       '@element-plus/icons-vue': ^2.0.4
       '@floating-ui/dom': ^0.5.0
+      '@ls-lint/ls-lint': ^1.11.2
       '@pnpm/find-workspace-packages': ^4.0.5
       '@pnpm/logger': ^4.0.0
       '@pnpm/types': ^8.0.1
@@ -93,6 +94,7 @@ importers:
       memoize-one: 6.0.0
       normalize-wheel-es: 1.1.2
     devDependencies:
+      '@ls-lint/ls-lint': 1.11.2
       '@pnpm/find-workspace-packages': 4.0.18_@pnpm+logger@4.0.0
       '@pnpm/logger': 4.0.0
       '@pnpm/types': 8.4.0
@@ -848,6 +850,13 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
     optional: true
+
+  /@ls-lint/ls-lint/1.11.2:
+    resolution: {integrity: sha512-kX+CCjgNz+NHCaOcFyJLSBLRgAoyOxN18QFLpgucz5ILvbr60BGjwKaoPYTv/rBV/77L+Oz82lpP24mzJ2wGsQ==}
+    cpu: [x64, arm64]
+    os: [darwin, linux, win32]
+    hasBin: true
+    dev: true
 
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
