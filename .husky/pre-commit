@@ -1,0 +1,7 @@
+#!bin/sh
+. "$(dirname "$0")/_/husky.sh"
+. "$(dirname "$0")/common.sh"
+
+# Format and submit code according to lintstagedrc.js configuration
+pnpm exec lint-staged
+pnpm exec pretty-quick --staged

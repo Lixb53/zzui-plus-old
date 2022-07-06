@@ -8,16 +8,19 @@
     "docs"
   ],
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "gen:version": "tsx scripts/gen-version.ts",
-    "clean": "pnpm run clean:dist && pnpm run -r --parallel clean",
-    "clean:dist": "rimraf dist",
     "build": "pnpm run -C internal/build start",
     "build:theme": "pnpm run -C packages/theme-chalk build",
+    "clean": "pnpm run clean:dist && pnpm run -r --parallel clean",
+    "clean:dist": "rimraf dist",
+    "gen:version": "tsx scripts/gen-version.ts",
+    "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx,.md,.json --max-warnings 0 && pretty-quick --check --branch dev",
+    "lint:fix": "eslint --fix . --ext .vue,.js,.ts,.jsx,.tsx,.md,.json && pretty-quick --branch dev",
+    "lint:commit": "commitlint --from $(git merge-base origin/dev HEAD) --to HEAD > ./commit-lint.txt",
     "stub": "pnpm run -r --parallel stub",
-    "postinstall": "pnpm stub && concurrently \"pnpm gen:version\" \"pnpm run -C internal/metadata dev\"",
     "site": "pnpm -F site dev",
-    "site:build": "pnpm -F site build"
+    "site:build": "pnpm -F site build",
+    "postinstall": "pnpm stub && concurrently \"pnpm gen:version\" \"pnpm run -C internal/metadata dev\"",
+    "preinstall": "npx only-allow pnpm"
   },
   "peerDependencies": {
     "vue": "^3.2.35"
@@ -42,6 +45,8 @@
     "normalize-wheel-es": "^1.1.2"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
     "@ls-lint/ls-lint": "^1.11.2",
     "@pnpm/find-workspace-packages": "^4.0.5",
     "@pnpm/logger": "^4.0.0",
@@ -73,8 +78,9 @@
     "expect-type": "^0.13.0",
     "fast-glob": "^3.2.11",
     "husky": "^8.0.1",
+    "is-ci": "^3.0.1",
     "jsdom": "16.4.0",
-    "lint-staged": "^12.4.1",
+    "lint-staged": "^12.5.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.6.2",
     "pretty-quick": "^3.1.3",
