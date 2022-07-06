@@ -16,6 +16,7 @@ module.exports = defineConfig({
     'plugin:vue/vue3-recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier',
+    'plugin:prettier/recommended',
   ],
   settings: {
     'import/resolver': {
@@ -248,7 +249,7 @@ module.exports = defineConfig({
             position: 'before',
           },
           {
-            pattern: '@element-plus/**',
+            pattern: '@zzui/**',
             group: 'internal',
           },
         ],
@@ -265,6 +266,7 @@ module.exports = defineConfig({
     // eslint-plugin-eslint-comments
     'eslint-comments/disable-enable-pair': ['error', { allowWholeFile: true }],
 
+    'space-before-function-paren': 'off',
     // unicorn
     'unicorn/custom-error-definition': 'error',
     'unicorn/error-message': 'error',
