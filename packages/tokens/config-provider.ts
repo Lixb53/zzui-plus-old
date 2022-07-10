@@ -1,6 +1,6 @@
-import type { ConfigProviderProps } from '@zzui/components/src/config-provider';
-import type { InjectionKey, Ref } from 'vue';
+import type { ConfigProviderProps } from '@zzui/components/config-provider'
+import type { InjectionKey, Ref } from 'vue'
 
-export type ConfigProviderContext = Partial<ConfigProviderProps>;
+export type ConfigProviderContext = Partial<ConfigProviderProps>
 
-export const configProviderContextKey: InjectionKey<Ref<ConfigProviderContext>> = Symbol();
+export const configProviderContextKey: InjectionKey<Ref<ConfigProviderContext>> = Symbol()
