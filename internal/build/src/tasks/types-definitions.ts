@@ -6,13 +6,7 @@ import * as vueCompiler from 'vue/compiler-sfc'
 import glob from 'fast-glob'
 import chalk from 'chalk'
 import { Project } from 'ts-morph'
-import {
-  buildOutput,
-  epRoot,
-  excludeFiles,
-  pkgRoot,
-  projRoot,
-} from '@zzui/build-utils'
+import { buildOutput, epRoot, excludeFiles, pkgRoot, projRoot } from '@zzui/build-utils'
 import { pathRewriter } from '../utils'
 import typeUnsafeStricter from '../type-unsafe-stricter.json'
 import type { CompilerOptions, SourceFile } from 'ts-morph'
@@ -50,11 +44,7 @@ export const generateTypesDefinitions = async () => {
 
   const tasks = sourceFiles.map(async (sourceFile) => {
     const relativePath = path.relative(pkgRoot, sourceFile.getFilePath())
-    consola.trace(
-      chalk.yellow(
-        `Generating definition for file: ${chalk.bold(relativePath)}`
-      )
-    )
+    consola.trace(chalk.yellow(`Generating definition for file: ${chalk.bold(relativePath)}`))
 
     const emitOutput = sourceFile.getEmitOutput()
     const emitFiles = emitOutput.getOutputFiles()
@@ -68,17 +58,9 @@ export const generateTypesDefinitions = async () => {
         recursive: true,
       })
 
-      await fs.writeFile(
-        filepath,
-        pathRewriter('esm')(outputFile.getText()),
-        'utf8'
-      )
+      await fs.writeFile(filepath, pathRewriter('esm')(outputFile.getText()), 'utf8')
 
-      consola.success(
-        chalk.green(
-          `Definition for file: ${chalk.bold(relativePath)} generated`
-        )
-      )
+      consola.success(chalk.green(`Definition for file: ${chalk.bold(relativePath)} generated`))
     })
 
     await Promise.all(subTasks)
@@ -136,9 +118,7 @@ async function addSourceFiles(project: Project) {
     }),
     ...epPaths.map(async (file) => {
       const content = await fs.readFile(path.resolve(epRoot, file), 'utf-8')
-      sourceFiles.push(
-        project.createSourceFile(path.resolve(pkgRoot, file), content)
-      )
+      sourceFiles.push(project.createSourceFile(path.resolve(pkgRoot, file), content))
     }),
   ])
 

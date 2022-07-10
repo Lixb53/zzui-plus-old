@@ -49,9 +49,7 @@ export const buildConfig: Record<Module, BuildInfo> = {
     },
   },
 }
-export const buildConfigEntries = Object.entries(
-  buildConfig
-) as BuildConfigEntries
+export const buildConfigEntries = Object.entries(buildConfig) as BuildConfigEntries
 
 export type BuildConfig = typeof buildConfig
 export type BuildConfigEntries = [Module, BuildInfo][]

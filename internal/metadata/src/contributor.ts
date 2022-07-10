@@ -5,17 +5,8 @@ import { Octokit } from 'octokit'
 import consola from 'consola'
 import chalk from 'chalk'
 import { chunk, mapValues, uniqBy } from 'lodash-es'
-import {
-  ensureDir,
-  errorAndExit,
-  projRoot,
-  writeJson,
-} from '@zzui/build-utils'
-import {
-  REPO_BRANCH,
-  REPO_NAME,
-  REPO_OWNER,
-} from '@zzui/build-constants'
+import { ensureDir, errorAndExit, projRoot, writeJson } from '@zzui/build-utils'
+import { REPO_BRANCH, REPO_NAME, REPO_OWNER } from '@zzui/build-constants'
 
 interface FetchOption {
   key: string
@@ -56,9 +47,7 @@ interface ContributorInfo {
   count: number
 }
 
-const fetchCommits = async (
-  options: FetchOption[]
-): Promise<Record<string, ApiResult>> => {
+const fetchCommits = async (options: FetchOption[]): Promise<Record<string, ApiResult>> => {
   const query = `{
     repository(owner: "${REPO_OWNER}", name: "${REPO_NAME}") {
       object(expression: "${REPO_BRANCH}") {
@@ -66,9 +55,7 @@ const fetchCommits = async (
           ${options
             .map(({ path, after }, index) => {
               return `
-              path${index}: history(path: "${path}"${
-                after ? `, after: "${after}"` : ''
-              }) {
+              path${index}: history(path: "${path}"${after ? `, after: "${after}"` : ''}) {
                 nodes {
                   oid
                   author {
@@ -147,9 +134,7 @@ const getContributorsByComponents = async (components: string[]) => {
       .filter((option) => !!option.after)
   } while (options.length > 0)
 
-  return mapValues(commits, (commits) =>
-    calcContributors(uniqBy(commits, 'oid'))
-  )
+  return mapValues(commits, (commits) => calcContributors(uniqBy(commits, 'oid')))
 }
 
 async function getContributors() {
@@ -167,9 +152,7 @@ async function getContributors() {
       ...contributors,
       ...(await getContributorsByComponents(chunkComponents)),
     }
-    consola.success(
-      chalk.green(`Fetched contributors: ${chunkComponents.join(', ')}`)
-    )
+    consola.success(chalk.green(`Fetched contributors: ${chunkComponents.join(', ')}`))
   }
   return contributors
 }

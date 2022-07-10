@@ -9,20 +9,11 @@ import esbuild, { minify as minifyPlugin } from 'rollup-plugin-esbuild'
 import { parallel } from 'gulp'
 import glob from 'fast-glob'
 import { camelCase, upperFirst } from 'lodash'
-import {
-  PKG_BRAND_NAME,
-  PKG_CAMELCASE_LOCAL_NAME,
-  PKG_CAMELCASE_NAME,
-} from '@zzui/build-constants'
+import { PKG_BRAND_NAME, PKG_CAMELCASE_LOCAL_NAME, PKG_CAMELCASE_NAME } from '@zzui/build-constants'
 import { epOutput, epRoot, localeRoot } from '@zzui/build-utils'
 import { version } from '../../../../packages/zzui/version'
 import { ZzuiAlias } from '../plugins/zzui-alias'
-import {
-  formatBundleFilename,
-  generateExternal,
-  withTaskName,
-  writeBundles,
-} from '../utils'
+import { formatBundleFilename, generateExternal, withTaskName, writeBundles } from '../utils'
 import { target } from '../build-info'
 import type { Plugin } from 'rollup'
 
@@ -67,11 +58,7 @@ async function buildFullEntry(minify: boolean) {
   await writeBundles(bundle, [
     {
       format: 'umd',
-      file: path.resolve(
-        epOutput,
-        'dist',
-        formatBundleFilename('index.full', minify, 'js')
-      ),
+      file: path.resolve(epOutput, 'dist', formatBundleFilename('index.full', minify, 'js')),
       exports: 'named',
       name: PKG_CAMELCASE_NAME,
       globals: {
@@ -82,11 +69,7 @@ async function buildFullEntry(minify: boolean) {
     },
     {
       format: 'esm',
-      file: path.resolve(
-        epOutput,
-        'dist',
-        formatBundleFilename('index.full', minify, 'mjs')
-      ),
+      file: path.resolve(epOutput, 'dist', formatBundleFilename('index.full', minify, 'mjs')),
       sourcemap: minify,
       banner,
     },
@@ -115,11 +98,7 @@ async function buildFullLocale(minify: boolean) {
       await writeBundles(bundle, [
         {
           format: 'umd',
-          file: path.resolve(
-            epOutput,
-            'dist/locale',
-            formatBundleFilename(filename, minify, 'js')
-          ),
+          file: path.resolve(epOutput, 'dist/locale', formatBundleFilename(filename, minify, 'js')),
           exports: 'default',
           name: `${PKG_CAMELCASE_LOCAL_NAME}${name}`,
           sourcemap: minify,

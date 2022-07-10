@@ -1,19 +1,9 @@
 import path from 'path'
 import helper from 'components-helper'
-import {
-  epOutput,
-  epPackage,
-  getPackageManifest,
-  projRoot,
-} from '@zzui/build-utils'
+import { epOutput, epPackage, getPackageManifest, projRoot } from '@zzui/build-utils'
 
 import type { TaskFunction } from 'gulp'
-import type {
-  ReAttribute,
-  ReComponentName,
-  ReDocUrl,
-  ReWebTypesSource,
-} from 'components-helper'
+import type { ReAttribute, ReComponentName, ReDocUrl, ReWebTypesSource } from 'components-helper'
 
 const reComponentName: ReComponentName = (title: string) =>
   `el-${title
@@ -29,11 +19,9 @@ const reDocUrl: ReDocUrl = (fileName, header) => {
 }
 
 const reWebTypesSource: ReWebTypesSource = (title) => {
-  const symbol = `El${title
-    .replaceAll(/-/g, ' ')
-    .replaceAll(/^\w|\s+\w/g, (item) => {
-      return item.trim().toUpperCase()
-    })}`
+  const symbol = `El${title.replaceAll(/-/g, ' ').replaceAll(/^\w|\s+\w/g, (item) => {
+    return item.trim().toUpperCase()
+  })}`
 
   return { symbol }
 }
@@ -67,9 +55,7 @@ const reAttribute: ReAttribute = (value, key) => {
       .replace(/\(.*\)/g, '')
       .toLowerCase()
   } else if (key === 'Accepted Values') {
-    return /\[.+\]\(.+\)/.test(str) || /^\*$/.test(str)
-      ? undefined
-      : str.replace(/`/g, '')
+    return /\[.+\]\(.+\)/.test(str) || /^\*$/.test(str) ? undefined : str.replace(/`/g, '')
   } else if (key === 'Subtags') {
     return str
       ? `el-${str
@@ -87,11 +73,7 @@ export const buildHelper: TaskFunction = (done) => {
   const { name, version } = getPackageManifest(epPackage)
 
   const tagVer = process.env.TAG_VERSION
-  const _version = tagVer
-    ? tagVer.startsWith('v')
-      ? tagVer.slice(1)
-      : tagVer
-    : version!
+  const _version = tagVer ? (tagVer.startsWith('v') ? tagVer.slice(1) : tagVer) : version!
 
   helper({
     name: name!,
