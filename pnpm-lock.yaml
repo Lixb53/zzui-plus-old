@@ -35,6 +35,9 @@ importers:
       '@zzui/components': workspace:^0.0.5
       '@zzui/constants': workspace:*
       '@zzui/eslint-config': workspace:^0.0.1
+      '@zzui/hooks': workspace:*
+      '@zzui/theme-chalk': workspace:*
+      '@zzui/tokens': workspace:*
       '@zzui/utils': workspace:*
       async-validator: ^4.1.1
       c8: ^7.11.3
@@ -87,6 +90,9 @@ importers:
       '@vueuse/core': 8.7.5_vue@3.2.37
       '@zzui/components': link:packages/components
       '@zzui/constants': link:packages/constants
+      '@zzui/hooks': link:packages/hooks
+      '@zzui/theme-chalk': link:packages/theme-chalk
+      '@zzui/tokens': link:packages/tokens
       '@zzui/utils': link:packages/utils
       async-validator: 4.2.5
       dayjs: 1.11.3

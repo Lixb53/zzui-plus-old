@@ -6,7 +6,7 @@ import type { TaskFunction } from 'gulp'
 import type { ReAttribute, ReComponentName, ReDocUrl, ReWebTypesSource } from 'components-helper'
 
 const reComponentName: ReComponentName = (title: string) =>
-  `el-${title
+  `zz-${title
     .replace(/\B([A-Z])/g, '-$1')
     .replace(/[ ]+/g, '-')
     .toLowerCase()}`
@@ -19,7 +19,7 @@ const reDocUrl: ReDocUrl = (fileName, header) => {
 }
 
 const reWebTypesSource: ReWebTypesSource = (title) => {
-  const symbol = `El${title.replaceAll(/-/g, ' ').replaceAll(/^\w|\s+\w/g, (item) => {
+  const symbol = `Zz${title.replaceAll(/-/g, ' ').replaceAll(/^\w|\s+\w/g, (item) => {
     return item.trim().toUpperCase()
   })}`
 
@@ -58,8 +58,8 @@ const reAttribute: ReAttribute = (value, key) => {
     return /\[.+\]\(.+\)/.test(str) || /^\*$/.test(str) ? undefined : str.replace(/`/g, '')
   } else if (key === 'Subtags') {
     return str
-      ? `el-${str
-          .replaceAll(/\s*\/\s*/g, '/el-')
+      ? `zz-${str
+          .replaceAll(/\s*\/\s*/g, '/zz-')
           .replaceAll(/\B([A-Z])/g, '-$1')
           .replaceAll(/\s+/g, '-')
           .toLowerCase()}`
@@ -80,7 +80,7 @@ export const buildHelper: TaskFunction = (done) => {
     version: _version,
     entry: `${path.resolve(
       projRoot,
-      'docs/en-US/component'
+      'site/en-US/component'
     )}/!(datetime-picker|message-box|message).md`,
     outDir: epOutput,
     reComponentName,
