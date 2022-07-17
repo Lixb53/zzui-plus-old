@@ -14,9 +14,9 @@
     "esModuleInterop": true,
     "removeComments": false,
     "rootDir": ".",
-    "types": [],
     "paths": {
       "@zzui/*": ["packages/*"]
     }
-  }
+  },
+  "include": ["typings/*.d.ts", "typings/*.ts"]
 }

@@ -1,8 +1,8 @@
-import { withInstall } from '@zzui/utils';
+import { withInstall } from '@zzui/utils'
 
-import Button from './src/button';
+import Button from './src/button'
 
-export const ZzButton = withInstall(Button);
-export default ZzButton;
+export const ZzButton = withInstall(Button)
+export default ZzButton
 
-export * from './src/button';
+export * from './src/button'
