@@ -1,4 +1,4 @@
-import { buildProps } from '@zzui/utils'
+import { buildProps, definePropType } from '@zzui/utils'
 
 export const inputProps = buildProps({
   id: {
@@ -11,4 +11,12 @@ export const inputProps = buildProps({
     default: 'text',
   },
   placeholder: String,
+  modelValue: {
+    type: definePropType<string | number | null | undefined>([String, Number, Object]),
+    default: '',
+  },
+  resize: {
+    type: String,
+    values: ['none', 'both', 'horizontal', 'vertial'],
+  },
 })

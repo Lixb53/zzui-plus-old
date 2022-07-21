@@ -5,6 +5,6 @@
 </script>
 <template>
   <div>
-    <zz-input v-model="inputValue" placeholder="textarea...." />
+    <zz-input v-model="inputValue" placeholder="textarea...." disabled />
   </div>
 </template>
