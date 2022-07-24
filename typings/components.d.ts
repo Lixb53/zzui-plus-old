@@ -3,8 +3,8 @@ declare module 'vue' {
     Zzbutton: typeof import('../packages/zzui')['ZzButton']
     ZzConfigProvider: typeof import('../packages/zzui')['ZzConfigProvider']
     ZzInput: typeof import('../packages/zzui')['ZzInput']
+    ZzIcon: typeof import('../packages/zzui')['ZzIcon']
   }
 }
 
-declare module '@zzui/build-utils'
 export {}

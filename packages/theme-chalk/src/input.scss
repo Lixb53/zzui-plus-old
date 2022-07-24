@@ -81,6 +81,54 @@
     box-sizing: border-box;
   }
 
+  @each $slot in (prefix, suffix) {
+    @include e($slot) {
+      display: inline-flex;
+      white-space: nowrap;
+      flex-shrink: 0;
+      flex-wrap: nowrap;
+      height: 100%;
+      text-align: center;
+      color: var(#{getCssVarName('input-icon-color')}, map.get($input, 'icon-color'));
+      // transition: all getCssVar('transition-duration');
+      pointer-events: none;
+    }
+
+    @include e(#{$slot}-inner) {
+      pointer-events: all;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      @if $slot==prefix {
+        > :last-child {
+          margin-right: 8px;
+        }
+
+        > :first-child {
+          &,
+          &.#{$namespace}-input__icon {
+            margin-left: 0;
+          }
+        }
+      } @else {
+        > :last-child {
+          margin-left: 8px;
+        }
+      }
+    }
+  }
+
+  & .#{$namespace}-input__icon {
+    height: inherit;
+    line-height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // transition: all getCssVar('transition-duration');
+    margin-left: 8px;
+  }
+
   @include when(disabled) {
     cursor: not-allowed;
 

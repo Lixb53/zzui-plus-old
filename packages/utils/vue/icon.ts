@@ -7,15 +7,15 @@ import {
   Loading,
   SuccessFilled,
   WarningFilled,
-} from '@element-plus/icons-vue';
-import { definePropType } from './props';
-import type { Component } from 'vue';
+} from '@element-plus/icons-vue'
+import { definePropType } from './props'
+import type { Component } from 'vue'
 
-export const iconPropType = definePropType<string | Component>([String, Object, Function]);
+export const iconPropType = definePropType<string | Component>([String, Object, Function])
 
 export const CloseComponents = {
   Close,
-};
+}
 
 export const TypeComponents = {
   Close,
@@ -23,17 +23,17 @@ export const TypeComponents = {
   InfoFilled,
   WarningFilled,
   CircleCloseFilled,
-};
+}
 
 export const TypeComponentsMap = {
   success: SuccessFilled,
   warning: WarningFilled,
   error: CircleCloseFilled,
   info: InfoFilled,
-};
+}
 
 export const ValidateComponentsMap = {
   validating: Loading,
   success: CircleCheck,
   error: CircleClose,
-};
+}

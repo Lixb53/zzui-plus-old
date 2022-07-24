@@ -2,11 +2,13 @@
   import { computed, defineComponent, ref } from 'vue'
   import { useDisabled, useNamespace } from '@zzui/hooks'
   import { UPDATE_MODEL_EVENT } from '@zzui/constants'
+  import { ZzIcon } from '@zzui/components/icon'
   import { inputProps } from './input'
 
   type TargetElement = HTMLInputElement | HTMLTextAreaElement
   export default defineComponent({
     name: 'ZzInput',
+    components: { ZzIcon },
     inheritAttrs: false,
     props: inputProps,
     setup(props, { emit, slots }) {
@@ -22,6 +24,8 @@
           [nsInput.b('group')]: slots.prepend || slots.append,
           [nsInput.bm('group', 'prepend')]: slots.prepend,
           [nsInput.bm('group', 'append')]: slots.append,
+          [nsInput.m('prefix')]: slots.prefix || props.prefixIcon,
+          [nsInput.m('suffix')]: slots.suffix || props.suffixIcon,
         },
       ])
 
@@ -64,6 +68,14 @@
         <slot name="prepend" />
       </div>
       <div :class="[nsInput.e('wrapper'), nsInput.is('focus', focused)]">
+        <div v-if="$slots.prefix || prefixIcon" :class="nsInput.e('prefix')">
+          <span :class="nsInput.e('prefix-inner')">
+            <slot name="prefix" />
+            <zz-icon v-if="prefixIcon" :class="nsInput.e('icon')">
+              <component :is="prefixIcon" />
+            </zz-icon>
+          </span>
+        </div>
         <input
           :class="nsInput.e('inner')"
           :type="type"
@@ -73,6 +85,14 @@
           @blur="handleBlur"
           @input="handleInput"
         />
+        <div v-if="$slots.suffix || suffixIcon" :class="nsInput.e('suffix')">
+          <span :class="nsInput.e('suffix-inner')">
+            <slot name="suffix" />
+            <zz-icon v-if="suffixIcon" :class="nsInput.e('icon')">
+              <component :is="suffixIcon" />
+            </zz-icon>
+          </span>
+        </div>
       </div>
       <!-- append slot -->
       <div v-if="$slots.append" :class="nsInput.be('group', 'append')">

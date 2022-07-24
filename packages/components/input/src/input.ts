@@ -1,4 +1,4 @@
-import { buildProps, definePropType } from '@zzui/utils'
+import { buildProps, definePropType, iconPropType } from '@zzui/utils'
 
 export const inputProps = buildProps({
   id: {
@@ -18,5 +18,13 @@ export const inputProps = buildProps({
   resize: {
     type: String,
     values: ['none', 'both', 'horizontal', 'vertial'],
+  },
+  prefixIcon: {
+    type: iconPropType,
+    default: '',
+  },
+  suffixIcon: {
+    type: iconPropType,
+    default: '',
   },
 })
