@@ -1,3 +1,4 @@
+import { useSizeProp } from '@zzui/hooks'
 import { buildProps, definePropType, iconPropType } from '@zzui/utils'
 
 export const inputProps = buildProps({
@@ -5,6 +6,7 @@ export const inputProps = buildProps({
     type: String,
     default: undefined,
   },
+  size: useSizeProp,
   disabled: Boolean,
   type: {
     type: String,
@@ -26,5 +28,13 @@ export const inputProps = buildProps({
   suffixIcon: {
     type: iconPropType,
     default: '',
+  },
+  clearable: {
+    type: Boolean,
+    default: false,
+  },
+  readonly: {
+    type: Boolean,
+    default: false,
   },
 })

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, watch } from 'vue'
 
   const inputValue = ref('')
+  watch(inputValue, () => {
+    console.log(inputValue.value)
+  })
 </script>
 <template>
-  <div>
-    <zz-input v-model="inputValue" placeholder="textarea...." />
-  </div>
+  <zz-input v-model="inputValue" placeholder="textarea...." size="small" clearable />
 </template>

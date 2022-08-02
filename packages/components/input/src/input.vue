@@ -1,6 +1,7 @@
 <script lang="ts">
   import { computed, defineComponent, ref } from 'vue'
-  import { useDisabled, useNamespace } from '@zzui/hooks'
+  import { CircleClose } from '@element-plus/icons-vue'
+  import { useDisabled, useNamespace, useSize } from '@zzui/hooks'
   import { UPDATE_MODEL_EVENT } from '@zzui/constants'
   import { ZzIcon } from '@zzui/components/icon'
   import { inputProps } from './input'
@@ -8,26 +9,40 @@
   type TargetElement = HTMLInputElement | HTMLTextAreaElement
   export default defineComponent({
     name: 'ZzInput',
-    components: { ZzIcon },
+    components: { ZzIcon, CircleClose },
     inheritAttrs: false,
     props: inputProps,
     setup(props, { emit, slots }) {
       const nsInput = useNamespace('input')
       const nsTextarea = useNamespace('textarea')
       const focused = ref(false)
+      const hovering = ref(false)
+      const inputSize = useSize()
+
       const inputDisabled = useDisabled()
 
       const getClass = computed(() => [
         props.type === 'textarea' ? nsTextarea.b() : nsInput.b(),
+        nsInput.m(inputSize.value),
         nsInput.is('disabled', inputDisabled.value),
         {
           [nsInput.b('group')]: slots.prepend || slots.append,
           [nsInput.bm('group', 'prepend')]: slots.prepend,
           [nsInput.bm('group', 'append')]: slots.append,
           [nsInput.m('prefix')]: slots.prefix || props.prefixIcon,
-          [nsInput.m('suffix')]: slots.suffix || props.suffixIcon,
+          [nsInput.m('suffix')]: slots.suffix || props.suffixIcon || props.clearable,
         },
       ])
+
+      const showClear = computed(
+        () =>
+          props.clearable &&
+          !inputDisabled.value &&
+          !props.readonly &&
+          (focused.value || hovering.value)
+      )
+
+      const suffixVisible = computed(() => !!slots.suffix || !!props.suffixIcon || showClear.value)
 
       const handleFocus = (event: FocusEvent) => {
         focused.value = true
@@ -46,6 +61,21 @@
         emit('input', value)
       }
 
+      const handleMouseEnter = (evt: MouseEvent) => {
+        hovering.value = true
+        emit('mouseenter', evt)
+      }
+      const handleMouseLeave = (evt: MouseEvent) => {
+        hovering.value = false
+        emit('mouseleave', evt)
+      }
+
+      const clear = () => {
+        emit(UPDATE_MODEL_EVENT, '')
+        emit('clear')
+        emit('input', '')
+      }
+
       return {
         nsInput,
         nsTextarea,
@@ -54,14 +84,20 @@
         handleFocus,
         handleBlur,
         handleInput,
+        inputSize,
         inputDisabled,
+        showClear,
+        suffixVisible,
+        handleMouseEnter,
+        handleMouseLeave,
+        clear,
       }
     },
   })
 </script>
 
 <template>
-  <div :class="getClass">
+  <div :class="getClass" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
     <template v-if="type !== 'textarea'">
       <!-- prepend slot -->
       <div v-if="$slots.prepend" :class="nsInput.be('group', 'prepend')">
@@ -85,14 +121,24 @@
           @blur="handleBlur"
           @input="handleInput"
         />
-        <div v-if="$slots.suffix || suffixIcon" :class="nsInput.e('suffix')">
+        <span v-if="suffixVisible" :class="nsInput.e('suffix')">
           <span :class="nsInput.e('suffix-inner')">
-            <slot name="suffix" />
-            <zz-icon v-if="suffixIcon" :class="nsInput.e('icon')">
-              <component :is="suffixIcon" />
+            <template v-if="!showClear">
+              <slot name="suffix" />
+              <zz-icon v-if="suffixIcon" :class="nsInput.e('icon')">
+                <component :is="suffixIcon" />
+              </zz-icon>
+            </template>
+            <zz-icon
+              v-if="showClear"
+              :class="[nsInput.e('icon'), nsInput.e('clear')]"
+              @mousedown.prevent
+              @click="clear"
+            >
+              <circle-close />
             </zz-icon>
           </span>
-        </div>
+        </span>
       </div>
       <!-- append slot -->
       <div v-if="$slots.append" :class="nsInput.be('group', 'append')">

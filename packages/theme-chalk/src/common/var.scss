@@ -347,6 +347,16 @@ $input-disabled: map.merge(
   $input-disabled
 );
 
+$input-font-size: () !default;
+$input-font-size: map.merge(
+  (
+    'large': 14px,
+    'default': 14px,
+    'small': 12px,
+  ),
+  $input-font-size
+);
+
 $input-height: () !default;
 $input-height: map.merge($common-component-size, $input-height);
 

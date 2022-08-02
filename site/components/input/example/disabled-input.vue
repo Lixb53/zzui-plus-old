@@ -4,7 +4,5 @@
   const inputValue = ref('')
 </script>
 <template>
-  <div>
-    <zz-input v-model="inputValue" placeholder="textarea...." disabled />
-  </div>
+  <zz-input v-model="inputValue" placeholder="textarea...." disabled />
 </template>

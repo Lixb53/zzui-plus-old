@@ -18,4 +18,6 @@
 
 ## 复合型输入框
 
-<demo src="./example/compound-input.vue" title="文本域" desc="可以在输入框中前置或后置一个元素，通常是标签或按钮。"></demo>
+可以在输入框中前置或后置一个元素，通常是标签或按钮
+
+要在输入框中添加图标，你可以简单地使用 prefix-icon 和 suffix-icon 属性。 另外， prefix 和 suffix 命名的插槽也能正常工作。 <demo src="./example/compound-input.vue"></demo>
