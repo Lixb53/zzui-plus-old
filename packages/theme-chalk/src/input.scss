@@ -35,6 +35,17 @@
   line-height: getCssVar('input-height');
   box-sizing: border-box;
 
+  & .#{$namespace}-input__clear,
+  & .#{$namespace}-input__password {
+    color: getCssVar('input-icon-color');
+    font-size: map.get($input-font-size, 'default');
+    cursor: pointer;
+
+    &:hover {
+      color: getCssVar('input-color-hover-color');
+    }
+  }
+
   @include e(wrapper) {
     display: inline-flex;
     flex-grow: 1;

@@ -15,8 +15,8 @@ module.exports = defineConfig({
     'plugin:markdown/recommended',
     'plugin:vue/vue3-recommended',
     'plugin:@typescript-eslint/recommended',
-    'prettier',
     'plugin:prettier/recommended',
+    'prettier',
   ],
   settings: {
     'import/resolver': {

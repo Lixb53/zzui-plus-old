@@ -28,7 +28,7 @@
     </zz-col>
     <zz-col :span="8">
       <zz-input v-model="inputValue" placeholder="textarea....">
-        <template #suffix>
+        <template #prefix>
           <zz-icon>
             <Search />
           </zz-icon>

@@ -37,4 +37,14 @@ export const inputProps = buildProps({
     type: Boolean,
     default: false,
   },
+  formatter: {
+    type: Function,
+  },
+  parser: {
+    type: Function,
+  },
+  showPassword: {
+    type: Boolean,
+    default: false,
+  },
 })
