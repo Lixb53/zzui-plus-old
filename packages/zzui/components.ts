@@ -6,7 +6,6 @@ import { ZzRow } from '@zzui/components/row'
 import { ZzCol } from '@zzui/components/col'
 import { ZzPopper } from '@zzui/components/popper'
 import { ZzTooltip } from '@zzui/components/tooltip'
-import { ZzTtt } from '@zzui/components/ttt'
 
 import type { Plugin } from 'vue'
 
@@ -19,5 +18,4 @@ export default [
   ZzCol,
   ZzPopper,
   ZzTooltip,
-  ZzTtt,
 ] as Plugin[]

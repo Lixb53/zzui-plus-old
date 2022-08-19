@@ -1,12 +1,23 @@
 <script lang="ts" setup>
-  import { computed, inject, onMounted, provide, ref, toRefs, unref, watch } from 'vue'
+  import {
+    computed,
+    inject,
+    onBeforeMount,
+    onMounted,
+    provide,
+    ref,
+    toRefs,
+    unref,
+    watch,
+  } from 'vue'
 
   import { createPopper } from '@popperjs/core'
-  import { isElement, isNil } from 'lodash-unified'
+  import { isNil } from 'lodash-unified'
   import ZzFocusTrap from '@zzui/components/focus-trap'
   import { useNamespace } from '@zzui/hooks'
   import { POPPER_CONTENT_INJECTION_KEY, POPPER_INJECTION_KEY } from '@zzui/tokens'
-  import { usePopperContentProps } from './content'
+  import { isElement } from '@zzui/utils'
+  import { usePopperContentEmits, usePopperContentProps } from './content'
   import { buildPopperOptions, unwrapMeasurableEl } from './utils'
   import type { WatchStopHandle } from 'vue'
 
@@ -14,7 +25,10 @@
     name: 'ZzPopperContent',
   })
 
+  const emit = defineEmits(usePopperContentEmits)
+
   const props = defineProps(usePopperContentProps)
+
   const { role, contentRef, popperInstanceRef, triggerRef } = inject(
     POPPER_INJECTION_KEY,
     undefined
@@ -22,7 +36,7 @@
 
   const ns = useNamespace('popper')
   const popperContentRef = ref<HTMLElement>()
-  const contentZIndex = ref(props.zIndex)
+  const focusStartRef = ref<string | HTMLElement>('first')
   const arrowRef = ref<HTMLElement>()
   const arrowOffset = ref<number>()
   provide(POPPER_CONTENT_INJECTION_KEY, {
@@ -30,9 +44,26 @@
     arrowRef,
   })
 
+  const contentZIndex = ref(props.zIndex)
+  const trapped = ref<boolean>(false)
+
   let triggerTargetAriaStopWatch: WatchStopHandle | undefined = undefined
 
-  const contentClass = computed(() => [ns.b(), ns.is(props.effect)])
+  const computedReference = computed(() =>
+    unwrapMeasurableEl(props.referenceEl || unref(triggerRef))
+  )
+
+  const contentStyle = computed(() => [{ zIndex: unref(contentZIndex) }, props.popperStyle] as any)
+  const contentClass = computed(() => [
+    ns.b(),
+    ns.is(props.effect),
+    ns.is('pure', props.pure),
+    props.popperClass,
+  ])
+
+  const ariaModal = computed<string | undefined>(() => {
+    return role && role.value === 'dialog' ? 'false' : undefined
+  })
 
   const createPopperInstance = ({ referenceEl, popperContentEl, arrowEl }) => {
     const options = buildPopperOptions(props, {
@@ -47,17 +78,49 @@
     shouldUpdateZIndex && (contentZIndex.value = props.zIndex)
   }
 
-  const computedReference = computed(() =>
-    unwrapMeasurableEl(props.referenceEl || unref(triggerRef))
-  )
-
   const togglePopperAlive = () => {
-    const monitorable = { name: 'eventLiseners', enabled: props.visible }
+    const monitorable = { name: 'eventListeners', enabled: props.visible }
     unref(popperInstanceRef)?.setOptions?.((options) => ({
       ...options,
       modifiers: [...(options.modifiers || []), monitorable],
     }))
     updatePopper(false)
+    if (props.visible && props.focusOnShow) {
+      trapped.value = true
+    } else if (props.visible === false) {
+      trapped.value = false
+    }
+  }
+
+  const onFocusAfterTrapped = () => {
+    emit('focus')
+  }
+
+  const onFocusAfterReleased = () => {
+    focusStartRef.value = 'first'
+    emit('blur')
+  }
+  const onFocusInTrap = (event: FocusEvent) => {
+    if (props.visible && !trapped.value) {
+      if (event.relatedTarget) {
+        ;(event.relatedTarget as HTMLElement)?.focus()
+      }
+      if (event.target) {
+        focusStartRef.value = event.target as typeof focusStartRef.value
+      }
+      trapped.value = true
+    }
+  }
+
+  const onFocusoutPrevented = () => {
+    if (!props.trapping) {
+      trapped.value = false
+    }
+  }
+
+  const onReleaseRequested = () => {
+    trapped.value = false
+    emit('close')
   }
 
   onMounted(() => {
@@ -65,11 +128,10 @@
     watch(
       computedReference,
       (referenceEl) => {
-        console.log(referenceEl, arrowRef.value)
-
         updateHandle?.()
         const popperInstance = unref(popperInstanceRef)
         popperInstance?.destroy?.()
+
         if (referenceEl) {
           const popperContentEl = unref(popperContentRef)!
           contentRef.value = popperContentEl
@@ -104,9 +166,9 @@
         if (isElement(el)) {
           const { ariaLabel, id } = toRefs(props)
           triggerTargetAriaStopWatch = watch(
-            [role, ariaLabel, id],
+            [role, ariaLabel, ariaModal, id],
             (watches) => {
-              ;['role', 'aria-label', 'id'].forEach((key, idx) => {
+              ;['role', 'aria-label', 'aria-modal', 'id'].forEach((key, idx) => {
                 isNil(watches[idx]) ? el.removeAttribute(key) : el.setAttribute(key, watches[idx])
               })
             },
@@ -114,7 +176,7 @@
           )
         }
         if (isElement(prevEl)) {
-          ;['role', 'aria-label', 'id'].forEach((key) => {
+          ;['role', 'aria-label', 'aria-modal', 'id'].forEach((key) => {
             prevEl?.removeAttribute(key)
           })
         }
@@ -135,11 +197,52 @@
       }
     )
   })
+
+  onBeforeMount(() => {
+    triggerTargetAriaStopWatch?.()
+    triggerTargetAriaStopWatch = undefined
+  })
+
+  defineExpose({
+    /**
+     * @description popper content element
+     */
+    popperContentRef,
+    /**
+     * @description popperjs instance
+     */
+    popperInstanceRef,
+    /**
+     * @description method for updating popper
+     */
+    updatePopper,
+    /**
+     * @description content Style
+     */
+    contentStyle,
+  })
 </script>
 
 <template>
-  <div ref="popperContentRef" :class="contentClass">
-    <zz-focus-trap>
+  <div
+    ref="popperContentRef"
+    :class="contentClass"
+    :style="contentStyle"
+    tabindex="-1"
+    @mouseenter="(e) => $emit('mouseenter', e)"
+    @mouseleave="(e) => $emit('mouseleave', e)"
+  >
+    <zz-focus-trap
+      :trapped="trapped"
+      :trap-on-focus-in="true"
+      :focus-trap-el="popperContentRef"
+      :focus-start-el="focusStartRef"
+      @focus-after-trapped="onFocusAfterTrapped"
+      @focus-after-released="onFocusAfterReleased"
+      @focusin="onFocusInTrap"
+      @focusout-prevented="onFocusoutPrevented"
+      @release-requested="onReleaseRequested"
+    >
       <slot />
     </zz-focus-trap>
   </div>

@@ -1,9 +1,7 @@
-<script lang="ts" setup>
-  import { onBeforeMount, onMounted, reactive, toRefs } from 'vue'
-</script>
+<script lang="ts" setup></script>
 
 <template>
-  <zz-tooltip content="test content">
+  <zz-tooltip content="test contentcontentcontentcontentcontentcontent">
     <zz-button>test</zz-button>
   </zz-tooltip>
   <zz-tooltip content="test content1">

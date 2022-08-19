@@ -2,10 +2,12 @@ import { usePopperContentProps } from '@zzui/components/popper/src/content'
 import { usePopperTriggerProps } from '@zzui/components/popper/src/trigger'
 import { POPPER_CONTAINER_SELECTOR, useDelayedToggleProps, useNamespace } from '@zzui/hooks'
 import { buildProps, definePropType } from '@zzui/utils'
-
-const ns = useNamespace('tooltip')
+import type { ExtractPropTypes } from 'vue'
+import type { Tooltip } from './tooltip.vue'
 
 const triggers = ['hover', 'focus', 'click', 'contextmenu'] as const
+const ns = useNamespace('tooltip')
+
 export type Trigger = typeof triggers[number]
 
 export const useTooltipContentProps = buildProps({
@@ -47,6 +49,10 @@ export const useTooltipTriggerProps = buildProps({
     type: definePropType<Trigger | Trigger[]>([String, Array]),
     default: 'hover',
   },
+  triggerKeys: {
+    type: definePropType<Trigger | Trigger[]>(Array),
+    default: () => [],
+  },
 })
 
 export const useTooltipProps = buildProps({
@@ -66,3 +72,13 @@ export const useTooltipProps = buildProps({
     default: true,
   },
 })
+
+export type ZzTooltipContentProps = ExtractPropTypes<typeof useTooltipContentProps>
+
+export type ZzTooltipTriggerProps = ExtractPropTypes<typeof useTooltipTriggerProps>
+
+export type ZzTooltipProps = ExtractPropTypes<typeof useTooltipProps> &
+  ZzTooltipContentProps &
+  ZzTooltipTriggerProps
+
+export type TooltipInstance = InstanceType<typeof Tooltip>

@@ -1,27 +1,35 @@
 <script lang="ts">
-  import { computed, defineComponent, provide, readonly, ref, toRef, unref } from 'vue'
+  import { computed, defineComponent, provide, readonly, ref, toRef, unref, watch } from 'vue'
   import { isUndefined } from 'lodash-unified'
   import { ZzPopper, ZzPopperArrow, usePopperProps } from '@zzui/components/popper'
-  import { useDelayedToggle, useModelToggle, usePopperContainer } from '@zzui/hooks'
+  import {
+    useDelayedToggle,
+    useId,
+    useModelToggle,
+    useModelToggleEmits,
+    useModelToggleProps,
+    usePopperContainer,
+  } from '@zzui/hooks'
   import { debugWarn, isBoolean } from '@zzui/utils'
   import { usePopperArrowProps } from '@zzui/components/popper/src/arrow'
   import ZzTooltipTrigger from './trigger.vue'
   import ZzTooltipContent from './content.vue'
   import { TOOLTIP_INJECTION_KEY } from './token'
   import { useTooltipContentProps, useTooltipProps, useTooltipTriggerProps } from './tooltip'
-  import type { ZzPopperContent } from '@zzui/components/popper'
 
   export default defineComponent({
     name: 'ZzTooltip',
     components: { ZzPopper, ZzTooltipContent, ZzTooltipTrigger, ZzPopperArrow },
     props: {
       ...usePopperProps,
-      ...useTooltipProps,
-      ...useTooltipTriggerProps,
+      ...useModelToggleProps,
       ...useTooltipContentProps,
+      ...useTooltipTriggerProps,
       ...usePopperArrowProps,
+      ...useTooltipProps,
     },
-    setup(props) {
+    emits: [...useModelToggleEmits, 'before-show', 'before-hide', 'show', 'hide', 'open', 'close'],
+    setup(props, { emit }) {
       usePopperContainer()
 
       const compatShowAfter = computed(() => {
@@ -46,8 +54,9 @@
         return isBoolean(props.visibleArrow) ? props.visibleArrow : props.showArrow
       })
 
+      const id = useId()
       const popperRef = ref<InstanceType<typeof ZzPopper> | null>(null)
-      const contentRef = ref<InstanceType<typeof ZzPopperContent> | null>(null)
+      const contentRef = ref<InstanceType<typeof ZzTooltipContent> | null>(null)
 
       const updatePopper = () => {
         const popperComponent = unref(popperRef)
@@ -71,7 +80,11 @@
         close: hide,
       })
 
+      const controlled = computed(() => isBoolean(props.visible))
+
       provide(TOOLTIP_INJECTION_KEY, {
+        controlled,
+        id,
         open: readonly(open),
         trigger: toRef(props, 'trigger'),
         onOpen: (event?: Event) => {
@@ -87,8 +100,36 @@
             onOpen(event)
           }
         },
+        onShow: () => {
+          emit('show', toggleReason.value)
+        },
+        onHide: () => {
+          emit('hide', toggleReason.value)
+        },
+        onBeforeShow: () => {
+          emit('before-show', toggleReason.value)
+        },
+        onBeforeHide: () => {
+          emit('before-hide', toggleReason.value)
+        },
         updatePopper,
       })
+
+      watch(
+        () => props.disabled,
+        (diabled) => {
+          if (diabled && open.value) {
+            open.value = false
+          }
+        }
+      )
+
+      const isFocusInsideContent = () => {
+        const popperContent: HTMLElement | undefined =
+          contentRef.value?.contentRef?.popperContentRef
+
+        return popperContent && popperContent.contains(document.activeElement)
+      }
 
       return {
         compatShowAfter,
@@ -96,6 +137,11 @@
         contentRef,
         popperRef,
         updatePopper,
+        isFocusInsideContent,
+        open,
+        hide,
+        onOpen,
+        onClose,
       }
     },
   })
@@ -117,6 +163,7 @@
       :content="content"
       :disabled="disabled"
       :offset="offset"
+      :enterable="enterable"
       :popper-class="popperClass"
       :popper-style="popperStyle"
       :placement="placement"
@@ -124,6 +171,10 @@
       :reference-el="referenceEl"
       :trigger-target-el="triggerTargetEl"
       :show-after="compatShowAfter"
+      :strategy="strategy"
+      :teleported="teleported"
+      :transition="transition"
+      :append-to="appendTo"
     >
       <slot name="content">
         <span v-if="rawContent" v-html="content" />

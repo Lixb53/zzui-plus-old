@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { defineComponent, inject, toRef } from 'vue'
+  import { defineComponent, inject, ref, toRef, unref } from 'vue'
   import { ZzPopperTrigger } from '@zzui/components/popper'
   import { useNamespace } from '@zzui/hooks'
   import { composeEventHandlers } from '@zzui/utils'
   import { useTooltipTriggerProps } from './tooltip'
   import { whenTrigger } from './utils'
   import { TOOLTIP_INJECTION_KEY } from './token'
+  import type { OnlyChildExpose } from '@zzui/components/slot'
 
   export default defineComponent({
     name: 'ZzTooltipTrigger',
@@ -13,10 +14,15 @@
     props: useTooltipTriggerProps,
     setup(props) {
       const ns = useNamespace('tooltip')
-      const { open, onOpen, onClose, onToggle } = inject(TOOLTIP_INJECTION_KEY, undefined)!
+      const { controlled, id, open, onOpen, onClose, onToggle } = inject(
+        TOOLTIP_INJECTION_KEY,
+        undefined
+      )!
+
+      const triggerRef = ref<OnlyChildExpose | null>(null)
 
       const stopWhenControlledOrDisabled = () => {
-        if (props.disabled) {
+        if (unref(controlled) || props.disabled) {
           return true
         }
       }
@@ -52,14 +58,33 @@
         whenTrigger(trigger, 'focus', onClose)
       )
 
+      const onContextMenu = composeEventHandlers(
+        stopWhenControlledOrDisabled,
+        whenTrigger(trigger, 'contextmenu', (e: Event) => {
+          e.preventDefault()
+          onToggle(e)
+        })
+      )
+
+      // const onKeydown = composeEventHandlers(stopWhenControlledOrDisabled, (e: KeyboardEvent) => {
+      //   const { code } = e
+      //   if (props.triggerKeys.includes(code)) {
+      //     e.preventDefault()
+      //     onToggle(e)
+      //   }
+      // })
+
       return {
+        id,
         ns,
+        onContextMenu,
         onMouseenter,
         onMouseleave,
         onClick,
         onFocus,
         onBlur,
         open,
+        triggerRef,
       }
     },
   })
@@ -67,12 +92,14 @@
 
 <template>
   <zz-popper-trigger
+    :id="id"
     :virtual-ref="virtualRef"
-    :virtual-triggering="virtualTriggering"
     :open="open"
+    :virtual-triggering="virtualTriggering"
     :class="ns.e('trigger')"
     @mouseenter="onMouseenter"
     @mouseleave="onMouseleave"
+    @contextmenu="onContextMenu"
     @click="onClick"
     @focus="onFocus"
     @blur="onBlur"

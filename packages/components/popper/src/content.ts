@@ -50,6 +50,19 @@ export const usePopperContentProps = buildProps({
     default: 'dark',
   },
   visible: Boolean,
+  enterable: {
+    type: Boolean,
+    default: true,
+  },
+  pure: Boolean,
+  focusOnShow: {
+    type: Boolean,
+    default: false,
+  },
+  trapping: {
+    type: Boolean,
+    default: false,
+  },
   popperClass: {
     type: definePropType<ClassType>([String, Array, Object]),
   },
@@ -69,5 +82,9 @@ export const usePopperContentProps = buildProps({
   virtualTriggering: Boolean,
   zIndex: Number,
 } as const)
+
+export const usePopperContentEmits = ['mouseenter', 'mouseleave', 'focus', 'blur', 'close']
+
+export type UsePopperContentProps = ExtractPropTypes<typeof usePopperContentProps>
 
 export type UsePopperCoreConfigProps = ExtractPropTypes<typeof usePopperCoreConfigProps>

@@ -1,10 +1,13 @@
 <script lang="ts" setup>
-  import { inject, onMounted, watch } from 'vue'
-  import { isElement } from 'lodash-unified'
+  import { computed, inject, onBeforeMount, onMounted, watch } from 'vue'
+  import { isNil } from 'lodash-unified'
+  import { unrefElement } from '@vueuse/core'
   import { ZzOnlyChild } from '@zzui/components/slot'
   import { POPPER_INJECTION_KEY } from '@zzui/tokens'
   import { useForwardRef } from '@zzui/hooks'
+  import { isElement } from '@zzui/utils'
   import { usePopperTriggerProps } from './trigger'
+  import type { WatchStopHandle } from 'vue'
 
   defineOptions({
     name: 'ZzPopperTrigger',
@@ -13,14 +16,48 @@
 
   const props = defineProps(usePopperTriggerProps)
 
-  const { triggerRef } = inject(POPPER_INJECTION_KEY, undefined)!
+  const { role, triggerRef } = inject(POPPER_INJECTION_KEY, undefined)!
 
   useForwardRef(triggerRef)
 
+  const ariaControls = computed<string | undefined>(() => {
+    return ariaHaspopup.value ? props.id : undefined
+  })
+
+  const ariaDescribedby = computed<string | undefined>(() => {
+    if (role && role.value === 'tooltip') {
+      return props.open && props.id ? props.id : undefined
+    }
+    return undefined
+  })
+
+  const ariaHaspopup = computed<string | undefined>(() => {
+    if (role && role.value !== 'tooltip') {
+      return role.value
+    }
+
+    return undefined
+  })
+
+  const ariaExpanded = computed<string | undefined>(() => {
+    return ariaHaspopup.value ? `${props.open}` : undefined
+  })
+
+  let virtualTriggerAriaStopWatch: WatchStopHandle | undefined = undefined
+
   onMounted(() => {
     watch(
+      () => props.virtualRef,
+      (virtualEl) => {
+        if (virtualEl) {
+          triggerRef.value = unrefElement(virtualEl as HTMLElement)
+        }
+      }
+    )
+
+    watch(
       () => triggerRef.value,
-      (el, preEl) => {
+      (el, prevEl) => {
         if (isElement(el)) {
           ;[
             'onMouseenter',
@@ -34,21 +71,56 @@
             const handler = props[eventName]
             if (handler) {
               ;(el as HTMLElement).addEventListener(eventName.slice(2).toLowerCase(), handler)
-              ;(preEl as HTMLElement)?.removeEventListener?.(
+              ;(prevEl as HTMLElement)?.removeEventListener?.(
                 eventName.slice(2).toLowerCase(),
                 handler
               )
             }
           })
+          virtualTriggerAriaStopWatch = watch(
+            [ariaControls, ariaDescribedby, ariaHaspopup, ariaExpanded],
+            (watches) => {
+              ;['aria-controls', 'aria-describedby', 'aria-haspopup', 'aria-expanded'].forEach(
+                (key, idx) => {
+                  isNil(watches[idx]) ? el.removeAttribute(key) : el.setAttribute(key, watches[idx])
+                }
+              )
+            },
+            { immediate: true }
+          )
+        }
+        if (isElement(prevEl)) {
+          ;['aria-controls', 'aria-describedby', 'aria-haspopup', 'aria-expanded'].forEach((key) =>
+            prevEl.removeAttribute(key)
+          )
         }
       },
       { immediate: true }
     )
   })
+
+  onBeforeMount(() => {
+    virtualTriggerAriaStopWatch?.()
+    virtualTriggerAriaStopWatch = undefined
+  })
+
+  defineExpose({
+    /**
+     * @description trigger element
+     */
+    triggerRef,
+  })
 </script>
 
 <template>
-  <zz-only-child v-if="!virtualTriggering" v-bind="$attrs">
+  <zz-only-child
+    v-if="!virtualTriggering"
+    v-bind="$attrs"
+    :aria-controls="ariaControls"
+    :aria-describedby="ariaDescribedby"
+    :aria-hasPopup="ariaHaspopup"
+    :aria-expanded="ariaExpanded"
+  >
     <slot />
   </zz-only-child>
 </template>
