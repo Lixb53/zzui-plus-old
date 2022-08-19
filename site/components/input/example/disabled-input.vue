@@ -5,4 +5,5 @@
 </script>
 <template>
   <zz-input v-model="inputValue" placeholder="textarea...." disabled />
+  <zz-popper>popper</zz-popper>
 </template>

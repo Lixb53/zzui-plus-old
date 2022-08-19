@@ -5,7 +5,8 @@
   "workspaces": [
     "packages/*",
     "play",
-    "docs"
+    "docs",
+    "site"
   ],
   "scripts": {
     "build": "pnpm run -C internal/build start",

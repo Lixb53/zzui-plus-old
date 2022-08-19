@@ -1,5 +1,6 @@
 import { resolve } from 'path'
 import { defaultTheme, defineUserConfig, viteBundler } from 'vuepress'
+import DefineOptions from 'unplugin-vue-define-options/vite'
 import { codeBlockPlugin } from '@yanyu-fe/vuepress-plugin-code-block'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 
@@ -27,7 +28,7 @@ export default defineUserConfig({
   }),
   bundler: viteBundler({
     viteOptions: {
-      plugins: [vueJsx()],
+      plugins: [vueJsx(), DefineOptions()],
       resolve: {
         alias: {
           '@zzui/zzui': resolve(__dirname, '../../packages/zzui/index.ts'),

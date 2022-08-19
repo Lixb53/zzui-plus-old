@@ -83,3 +83,10 @@ export function isMap(val: unknown): val is Map<any, any> {
 export function isNullOrUnDef(val: unknown): val is null | undefined {
   return isNil(val) || isNull(val)
 }
+
+export function isValidKey(
+  key: string | number | symbol,
+  object: object
+): key is keyof typeof object {
+  return key in object
+}

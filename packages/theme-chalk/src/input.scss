@@ -46,6 +46,21 @@
     }
   }
 
+  & .#{$namespace}-input__count {
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+    color: getCssVar('color-input');
+    font-size: 12px;
+
+    .#{$namespace}-input__cont-inner {
+      background: getCssVar('fill-color', 'blank');
+      line-height: initial;
+      display: inline-block;
+      padding-left: 8px;
+    }
+  }
+
   @include e(wrapper) {
     display: inline-flex;
     flex-grow: 1;
@@ -101,7 +116,7 @@
       height: 100%;
       text-align: center;
       color: var(#{getCssVarName('input-icon-color')}, map.get($input, 'icon-color'));
-      // transition: all getCssVar('transition-duration');
+      transition: all getCssVar('transition-duration');
       pointer-events: none;
     }
 
@@ -136,7 +151,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    // transition: all getCssVar('transition-duration');
+    transition: all getCssVar('transition-duration');
     margin-left: 8px;
   }
 
@@ -224,6 +239,16 @@
       outline: none;
       @include inset-input-border(#{getCssVar('input', 'focus-border-color')});
     }
+  }
+
+  & .#{$namespace}-input__count {
+    color: getCssVar('color-info');
+    background: getCssVar('fill-color', 'blank');
+    position: absolute;
+    font-size: 12px;
+    line-height: 14px;
+    bottom: 5px;
+    right: 10px;
   }
 
   @include when(disabled) {

@@ -1,5 +1,8 @@
 import { useSizeProp } from '@zzui/hooks'
-import { buildProps, definePropType, iconPropType } from '@zzui/utils'
+import { buildProps, definePropType, iconPropType, mutable } from '@zzui/utils'
+import type { StyleValue } from 'vue'
+
+export type InputAutoSize = { minRows?: number; maxRows?: number } | boolean
 
 export const inputProps = buildProps({
   id: {
@@ -16,6 +19,18 @@ export const inputProps = buildProps({
   modelValue: {
     type: definePropType<string | number | null | undefined>([String, Number, Object]),
     default: '',
+  },
+  autocomplete: {
+    type: String,
+    default: 'off',
+  },
+  autosize: {
+    type: definePropType<InputAutoSize>([Boolean, Object]),
+    default: false,
+  },
+  containerRole: {
+    type: String,
+    default: undefined,
   },
   resize: {
     type: String,
@@ -46,5 +61,21 @@ export const inputProps = buildProps({
   showPassword: {
     type: Boolean,
     default: false,
+  },
+  showWordLimit: {
+    type: Boolean,
+    default: false,
+  },
+  inputStyle: {
+    type: definePropType<StyleValue>([Object, Array, String]),
+    default: () => mutable({} as const),
+  },
+  label: {
+    type: String,
+    default: undefined,
+  },
+  tableIndex: {
+    type: [String, Number],
+    default: 0,
   },
 })

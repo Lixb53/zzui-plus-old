@@ -4,5 +4,5 @@
   const inputValue = ref('')
 </script>
 <template>
-  <zz-input v-model="inputValue" type="textarea" placeholder="textarea...." />
+  <zz-input v-model="inputValue" type="textarea" placeholder="textarea...." :rows="2" />
 </template>

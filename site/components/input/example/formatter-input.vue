@@ -12,5 +12,3 @@
     :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
   />
 </template>
-
-<style lang="scss" scoped></style>
