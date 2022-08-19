@@ -4,7 +4,20 @@ import { ZzInput } from '@zzui/components/input'
 import { ZzIcon } from '@zzui/components/icon'
 import { ZzRow } from '@zzui/components/row'
 import { ZzCol } from '@zzui/components/col'
+import { ZzPopper } from '@zzui/components/popper'
+import { ZzTooltip } from '@zzui/components/tooltip'
+import { ZzTtt } from '@zzui/components/ttt'
 
 import type { Plugin } from 'vue'
 
-export default [ZzButton, ZzConfigProvider, ZzInput, ZzIcon, ZzRow, ZzCol] as Plugin[]
+export default [
+  ZzButton,
+  ZzConfigProvider,
+  ZzInput,
+  ZzIcon,
+  ZzRow,
+  ZzCol,
+  ZzPopper,
+  ZzTooltip,
+  ZzTtt,
+] as Plugin[]

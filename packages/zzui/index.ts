@@ -7,7 +7,7 @@ export * from '@zzui/tokens'
 export * from '@zzui/utils'
 export { makeInstaller } from './make-installer'
 
-export const instlal = installer.install
+export const install = installer.install
 export const version = installer.version
 export default installer
 
