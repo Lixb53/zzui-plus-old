@@ -34,6 +34,12 @@
   @include when(light) {
     background: getCssVar('bg-color', 'overlay');
     border: 1px solid getCssVar('border-color', 'light');
+
+    #{$arrow-selector}::before {
+      border: 1px solid getCssVar('border-color', 'light');
+      background: getCssVar('bg-color', 'overlay');
+      right: 0;
+    }
   }
 
   @include when(pure) {

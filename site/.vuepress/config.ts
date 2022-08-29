@@ -35,6 +35,7 @@ export default defineUserConfig({
           '@zzui/hooks': resolve(__dirname, '../../packages/hooks/index.ts'),
           '@zzui/utils': resolve(__dirname, '../../packages/utils/index.ts'),
           '@zzui/tokens': resolve(__dirname, '../../packages/tokens/index.ts'),
+          '@zzui/directives': resolve(__dirname, '../../packages/directives'),
         },
       },
     },

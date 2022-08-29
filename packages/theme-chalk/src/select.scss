@@ -1,0 +1,69 @@
+@use 'sass:map';
+
+@use 'mixins/mixins' as *;
+@use 'mixins/var' as *;
+@use 'common/var' as *;
+@use './select-dropdown.scss';
+
+@include b(select) {
+  @include set-component-css-var('select', $select);
+}
+
+@include b(select) {
+  display: inline-block;
+  position: relative;
+  line-height: map.get($input-height, 'default');
+
+  &:hover:not(.#{$namespace}-select-disabled) {
+    .#{$namespace}-input__wrapper {
+      box-shadow: 0 0 0 1px getCssVar('select-border-color-hover') inset;
+    }
+  }
+
+  .#{$namespace}-input__wrapper {
+    cursor: pointer;
+
+    @include when(focus) {
+      @include inset-input-border(getCssVar('select-input-focus-border-color'), true);
+    }
+  }
+
+  .#{$namespace}-input__inner {
+    cursor: pointer;
+  }
+
+  .#{$namespace}-input__suffix {
+    cursor: pointer;
+  }
+
+  .#{$namespace}-input {
+    display: flex;
+    & .#{$namespace}-select__caret {
+      color: getCssVar('select-input-color');
+      font-size: getCssVar('select-input-font-size');
+      transition: transform getCssVar('transition-duration');
+      transform: rotateZ(180deg);
+      cursor: pointer;
+
+      @include when(reverse) {
+        transform: rotateZ(0deg);
+      }
+    }
+
+    &.is-focus .#{$namespace}-input__wrapper {
+      @include inset-input-border(getCssVar('select-input-focus-border-color'), true);
+    }
+  }
+
+  @include e(input) {
+    border: none;
+    outline: none;
+    padding: 0;
+    margin-left: 15px;
+    color: getCssVar('select-multiple-input-color');
+    font-size: getCssVar('select-font-size');
+    appearance: none;
+    height: 28px;
+    background-color: transparent;
+  }
+}

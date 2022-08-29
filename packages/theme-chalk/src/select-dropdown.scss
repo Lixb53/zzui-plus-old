@@ -1,0 +1,18 @@
+@use 'sass:map';
+
+@use 'mixins/mixins' as *;
+@use 'common/var' as *;
+
+@include b(select-dropdown) {
+  z-index: calc(#{getCssVar('index-top')} + 1);
+  border-radius: getCssVar('border-radius-base');
+  box-sizing: border-box;
+}
+
+@include b(select-dropdown__wrap) {
+  max-height: map.get($select-dropdown, 'max-height');
+}
+
+@include b(select-dropdown__list) {
+  list-style: none;
+}

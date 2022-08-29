@@ -162,6 +162,7 @@
       :aria-label="ariaLabel"
       :content="content"
       :disabled="disabled"
+      :effect="effect"
       :offset="offset"
       :enterable="enterable"
       :popper-class="popperClass"
@@ -175,6 +176,7 @@
       :teleported="teleported"
       :transition="transition"
       :append-to="appendTo"
+      :pure="pure"
     >
       <slot name="content">
         <span v-if="rawContent" v-html="content" />

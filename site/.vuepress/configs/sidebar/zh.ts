@@ -4,5 +4,6 @@ export const zh = {
     '/components/button/',
     '/components/input/',
     '/components/tooltip',
+    '/components/select',
   ],
 }

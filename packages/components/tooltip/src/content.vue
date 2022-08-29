@@ -156,6 +156,7 @@
         :reference-el="referenceEl"
         :trigger-target-el="triggerTargetEl"
         :visible="shouldShow"
+        :pure="pure"
         @mouseenter="onContentEnter"
         @mouseleave="onContentLeave"
         @blur="onBlur"

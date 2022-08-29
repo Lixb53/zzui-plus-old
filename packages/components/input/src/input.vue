@@ -218,6 +218,8 @@
         _ref.value?.focus()
       }
 
+      const blur = () => _ref.value?.blur()
+
       const handleCompositionstart = (event: CompositionEvent) => {
         emit('compositionstart', event)
         isComposing.value = true
@@ -281,6 +283,8 @@
         handleMouseEnter,
         handleMouseLeave,
         clear,
+        blur,
+        focus,
         input,
         textarea,
         passwordVisible,
@@ -305,7 +309,7 @@
   <div
     v-show="type !== 'hidden'"
     v-bind="containerAttrs"
-    :class="getClass"
+    :class="[getClass, $attrs.class]"
     :style="containerStyle"
     :role="containerRole"
     @mouseenter="handleMouseEnter"
@@ -326,6 +330,7 @@
           </span>
         </div>
         <input
+          :id="id"
           ref="input"
           :class="nsInput.e('inner')"
           v-bind="attrs"
