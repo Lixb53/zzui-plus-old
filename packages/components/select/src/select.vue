@@ -4,6 +4,7 @@
   import { clickOutside } from '@zzui/directives'
   import ZzTooltip from '@zzui/components/tooltip'
   import ZzInput from '@zzui/components/input'
+  import ZzScrollbar from '@zzui/components/scrollbar'
   import ZzOption from './option.vue'
   import ZzSelectMenu from './select-dropdown.vue'
   import { useSelectEmits, useSelectProps } from './select'
@@ -13,7 +14,7 @@
 
   export default defineComponent({
     name: 'ZzSelect',
-    components: { ZzTooltip, ZzInput, ZzOption, ZzSelectMenu },
+    components: { ZzTooltip, ZzInput, ZzOption, ZzSelectMenu, ZzScrollbar },
     directives: { clickOutside },
     props: useSelectProps,
     emits: useSelectEmits,
@@ -86,7 +87,7 @@
           <zz-input
             :id="id"
             ref="reference"
-            placeholder="Please input "
+            :placeholder="placeholder"
             :class="[nsSelect.is('focus', states.visible)]"
             @focus="handleFocus"
             @blur="handleBlur"
@@ -100,9 +101,14 @@
         </div>
       </template>
       <template #content>
-        <zz-select-menu :class="[nsSelect.be('dropdown', 'wrap'), nsSelect.be('dropdown', 'list')]">
-          <slot />
-          <!-- <zz-option /> -->
+        <zz-select-menu>
+          <zz-scrollbar
+            tag="ul"
+            :wrap-class="nsSelect.be('dropdown', 'wrap')"
+            :view-class="nsSelect.be('dropdown', 'list')"
+          >
+            <slot />
+          </zz-scrollbar>
         </zz-select-menu>
       </template>
     </zz-tooltip>

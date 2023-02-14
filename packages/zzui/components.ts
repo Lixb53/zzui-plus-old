@@ -7,6 +7,7 @@ import { ZzCol } from '@zzui/components/col'
 import { ZzPopper } from '@zzui/components/popper'
 import { ZzTooltip } from '@zzui/components/tooltip'
 import { ZzSelect } from '@zzui/components/select'
+import { ZzScrollbar } from '@zzui/components/scrollbar'
 
 import type { Plugin } from 'vue'
 
@@ -20,4 +21,5 @@ export default [
   ZzPopper,
   ZzTooltip,
   ZzSelect,
+  ZzScrollbar,
 ] as Plugin[]

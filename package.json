@@ -21,7 +21,8 @@
     "site": "pnpm -F site dev",
     "site:build": "pnpm -F site build",
     "postinstall": "pnpm stub && concurrently \"pnpm gen:version\" \"pnpm run -C internal/metadata dev\"",
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "reset": "rimraf node_modules"
   },
   "peerDependencies": {
     "vue": "^3.2.35"
@@ -98,7 +99,7 @@
     "typescript": "^4.6.4",
     "unplugin-element-plus": "^0.4.0",
     "unplugin-vue-define-options": "^0.6.1",
-    "vite": "^2.9.13",
+    "vite": "^3.1.8",
     "vitest": "^0.12.6",
     "vue": "^3.2.35",
     "vue-router": "^4.0.15",

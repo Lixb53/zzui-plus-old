@@ -1,6 +1,5 @@
 import { resolve } from 'path'
 import { defaultTheme, defineUserConfig, viteBundler } from 'vuepress'
-import DefineOptions from 'unplugin-vue-define-options/vite'
 import { codeBlockPlugin } from '@yanyu-fe/vuepress-plugin-code-block'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 
@@ -10,7 +9,6 @@ import * as sideBar from './configs/sidebar'
 export default defineUserConfig({
   title: '前端组件库',
   base: process.env.NODE_ENV === 'production' ? '/zzui-plus/' : '/',
-  plugins: [codeBlockPlugin()],
   locales: {
     '/': {
       lang: 'zh-CN',
@@ -28,7 +26,7 @@ export default defineUserConfig({
   }),
   bundler: viteBundler({
     viteOptions: {
-      plugins: [vueJsx(), DefineOptions()],
+      plugins: [vueJsx()],
       resolve: {
         alias: {
           '@zzui/zzui': resolve(__dirname, '../../packages/zzui/index.ts'),
@@ -43,4 +41,5 @@ export default defineUserConfig({
       reactivityTransform: true,
     },
   }),
+  plugins: [codeBlockPlugin({})],
 })
