@@ -8,7 +8,7 @@ import * as sideBar from './configs/sidebar'
 
 export default defineUserConfig({
   title: '前端组件库',
-  base: process.env.NODE_ENV === 'production' ? '/zzui-plus/' : '/',
+  base: process.env.NODE_ENV === 'production' ? '/zzui-plus-old/' : '/',
   locales: {
     '/': {
       lang: 'zh-CN',
